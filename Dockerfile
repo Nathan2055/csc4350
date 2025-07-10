@@ -1,5 +1,5 @@
 FROM node:lts
-WORKDIR /usr/src/TimerApp.js
+WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
