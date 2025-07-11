@@ -29,3 +29,4 @@ describe('Timer class', () => {
     expect(mockElement.innerText).toBe('0:09');
   });
 });
+
