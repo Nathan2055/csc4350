@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Nathan2055/csc4350/issues"
   },
-  "homepage": "https://github.com/Nathan2055/csc4350#readme"
+  "homepage": "https://github.com/Nathan2055/csc4350#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
