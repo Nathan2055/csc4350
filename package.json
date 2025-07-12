@@ -4,6 +4,7 @@
   "description": "Software Engineering Group Project",
   "main": "TimerApp.js",
   "scripts": {
+    "start": "node TimerApp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
