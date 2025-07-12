@@ -20,5 +20,8 @@
   "homepage": "https://github.com/Nathan2055/csc4350#readme",
   "dependencies": {
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4"
   }
 }
