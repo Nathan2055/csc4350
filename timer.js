@@ -6,6 +6,11 @@ export function convert_seconds(seconds) {
   
   export class Timer {
     constructor(seconds, display_dom) {
+      // If seconds is not a number, default to 10 minutes
+      if (isNaN(seconds)) {
+        seconds = 600;
+      }
+
       this.seconds = seconds;
       this.state = "Stopped";
       this.current = this.seconds;
