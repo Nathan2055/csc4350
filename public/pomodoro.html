@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Countdown Timer</title>
+  <style>
+    * {
+      margin: 0 auto;
+      padding: 0;
+    }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+    #timer {
+      font-size: 48px;
+    }
+    .content-container {
+      display: flex;
+      border: 1px solid blue;
+    }
+    .content-section {
+      border: 1px solid green;
+      min-height: 100px;
+    }
+
+    #timer-container {
+      width: 40%;
+    }
+
+    #todo-container {
+      width: 60%;
+    }
+    .content-section > div {
+      border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+    #timer-select {
+      margin-left: 5px;
+    }
+    .timer-controls {
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      width: 25%;
+    }
+    ul {
+      text-decoration: none;
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pomodoro</h1>
+  <div class="content-container">
+    <div id="timer-container" class="content-section">
+      <div id="timer">
+        <select id="timer-select">
+          <option value="5">5 Minute</option>
+          <option value="10">10 Minute</option>
+          <option value="custom">Custom</option>
+        </select>
+        <span id="timer-counter">
+          5:00
+        </span>
+        <div class="timer-controls">
+          <button onclick="start_timer()">Start</button>
+          <button>Pause</button>
+          <button>Reset</button>
+        </div>
+      </div>
+      <div id="instructions">
+        <p>Lots of instructions here. Many more instructions. All the instructions. Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc </p>
+      </div>
+    </div>
+    <div id="todo-container" class="content-section">
+      <div>
+        <span>ToDo</span>
+        <div class="todo-list">
+          <ul id="task-list">
+            <li>Task 1 | EST Time | Est Pomodoro</li>
+            <li>Task 2 | EST Time | Est Pomodoro</li>
+          </ul>
+          <div id="task-addition">
+            <!-- Here is where we will add the task -->
+            <input type="text" name="task-name">
+            <input type="text" name="task-est-time">
+            <button>Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function convert_seconds(seconds) {
+      var minutes = Math.floor(seconds / 60);
+      var remaining = seconds % 60;
+
+      return minutes+":"+remaining.toString().padStart(2, '0');
+    }
+
+    class Timer {
+      constructor(seconds, display_dom) {
+        this.seconds = seconds;
+        this.state = "Stopped";
+        this.current = this.seconds;
+        this.starttime = null;
+        this.elapsed = 0;
+        this.timer_loop = null;
+        this.sync_counter = 0;
+        this.display_dom = display_dom;
+      }
+
+      startTimer() {
+        this.starttime = new Date().getTime();
+        this.timer_loop = setInterval( (timer) => {
+          if (timer.sync_counter % 10 == 0) {
+            timer.timerSync();
+            timer.sync_counter = 0;
+          } else {
+            timer.countDown();
+          }
+          timer.sync_counter++;
+        }, 1000, this);
+      }
+
+      pauseTimer() {
+
+      }
+
+      countDown() {
+        this.current = this.current - 1;
+        this.display_dom.innerText = convert_seconds(this.current);
+        this.finished();
+      }
+
+      timerSync() {
+        var elapsed = new Date().getTime() - this.starttime;
+        this.elapsed = Math.floor(elapsed / 1000);
+
+        this.current = this.seconds - this.elapsed;
+        this.display_dom.innerText = convert_seconds(this.current);
+        this.finished();
+      }
+
+      finished() {
+        if (this.current > 0) {
+          return;  // If we are not at the end of the countdown, do nothing
+        }
+        clearInterval(this.timer_loop);
+        // Stop timer | Play Alarm
+        console.log("Timer should stop now.");
+      }
+    }
+
+    var ptimer = null;
+    var timer_select_dropdown = document.getElementById('timer-select');
+
+
+    let seconds = 10;
+    // let seconds = 5 * 60;
+    var timer_display = document.getElementById('timer-counter');
+    function start_timer() {
+      ptimer = new Timer(seconds, timer_display);
+      ptimer.startTimer();
+    }
+  </script>
+</body>
+</html>
