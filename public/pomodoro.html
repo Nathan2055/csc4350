@@ -54,7 +54,7 @@
   </style>
 </head>
 <body>
-  <h1>Pomodoro</h1>
+  <h1>The Amazing Pomodoro Timer</h1>
   <div class="content-container">
     <div id="timer-container" class="content-section">
       <div id="timer">
@@ -68,8 +68,8 @@
         </span>
         <div class="timer-controls">
           <button onclick="start_timer()">Start</button>
-          <button>Pause</button>
-          <button>Reset</button>
+          <button onclick='pause_timer()'>Pause</button>
+          <button onclick="reset_timer()">Reset</button>
         </div>
       </div>
       <div id="instructions">
@@ -129,6 +129,19 @@
       }
 
       pauseTimer() {
+        clearInterval(this.timer_loop);
+        this.timer_loop = null;
+        //console.log('Timer paused.');
+
+      }
+
+      resetTimer() {
+        clearInterval(this.timer_loop);
+        this.current = this.seconds;
+        this.elapsed = 0;
+        this.starttime = null;
+        this.sync_counter = 0;
+        this.display_dom.innerText = convert_seconds(this.current);
 
       }
 
@@ -167,7 +180,21 @@
     function start_timer() {
       ptimer = new Timer(seconds, timer_display);
       ptimer.startTimer();
+
     }
+    
+    function pause_timer() {
+      if (ptimer) {
+        ptimer.pauseTimer();
+      }
+
+    }
+    function reset_timer() {
+      if (ptimer) {
+        ptimer.resetTimer();
+      }
+    }
+
   </script>
 </body>
 </html>
