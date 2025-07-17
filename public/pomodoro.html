@@ -152,14 +152,21 @@
         this.finished();
       }
 
-      finished() {
-        if (this.current > 0) return;
-
+     finished() {
+      if (this.current <= 0) {
+        this.current = 0;
+        this.display_dom.innerText = convert_seconds(this.current);
         clearInterval(this.timer_loop);
         this.state = "Stopped";
-        console.log("Timer finished.");
-        document.getElementById('start-btn').disabled = false;
+      // Re-enable the start button when timer finishes
+      const startBtn = document.getElementById('start-btn');
+      if (startBtn) {
+        startBtn.disabled = false;
       }
+      console.log("Timer should stop now.");
+                }
+            }
+
     }
 
     let ptimer = null;
