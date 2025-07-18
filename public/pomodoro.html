@@ -65,6 +65,12 @@
           <option value="10">10 Minutes</option>
           <option value="custom">Custom</option>
         </select>
+        <input
+          type= "number"
+          id= "custom-timer-input"
+          placeholder= "Enter custom time (min)"
+          style= "display: none; margin-top: 10px" 
+          >
         <span id="timer-counter">5:00</span>
         <div class="timer-controls">
           <button id="start-btn" onclick="start_timer()">Start</button>
@@ -100,6 +106,7 @@
   </div>
 
   <script>
+    //TIMER FUNCTIONALITY 
     function convert_seconds(seconds) {
       const minutes = Math.floor(seconds / 60);
       const remaining = seconds % 60;
@@ -191,6 +198,60 @@
 
       document.getElementById('start-btn').disabled = true; // grey out button after one press, to be refreshed after pause or reset. 
     }
+
+    //TO-DO LIST FUNCTIONALITY
+    class toDoList{
+      constructor(listContainer){
+        this.tasks = []; // array to hold task objects
+        this.listContainer = listContainer;
+      }
+
+      addTask(name, estTime){
+        const task = {
+          name,
+          estTime: parseFloat(estTime),
+        };
+        this.tasks.push(task);
+        this.render();
+      }
+
+      /*calculateNumPomodoro(estTime, timerInterval) {
+        let timerValue = document.getElementById('timer-select').value;
+
+        if (timerValue === "custom"){
+          //...
+        }
+      }
+      */ 
+
+      render() {
+        // Clear existing list
+        this.listContainer.innerHTML = "";
+
+        this.tasks.forEach((task, index) => {
+          const li = document.createElement("li");
+          li.textContent = `${task.name} | ${task.estTime}`;
+          //li.textContent = `${task.name} | ${task.estTime} | <!--${calculateNumPomodoro(estTime, document.getElementById('timer-select').value)}
+          //for est. remainding pomodoros for tasks
+          this.listContainer.appendChild(li);
+        })
+
+      }
+    }
+    const list = new toDoList(document.getElementById("task-list"));
+
+    //ADD Button Functionality
+    document.querySelector("#task-addition button").addEventListener("click", () => {
+      const name = document.querySelector("input[name='task-name']").value.trim();
+      const estTime = document.querySelector("input[name='task-est-time']").value.trim();
+
+      if (!name || isNaN(estTime)){
+        alert("Please enter a valid task name and estimated time in minutes.");
+        return;
+      }
+
+      list.addTask(name, estTime);
+    })
   </script>
 </body>
 </html>
