@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
+
 <head>
   <meta charset="UTF-8" />
   <title>Countdown Timer</title>
@@ -54,9 +55,21 @@
       padding: 0;
     }
   </style>
+
+<!-- TODO: merge CSS
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" as="style" type="text/css" />
+    <link rel="preload" href="pomodoro-styles.css" as="style" type="text/css" />
+    <link rel="stylesheet" href="pomodoro-styles.css" />
+-->
+    <title>Countdown Timer</title>
 </head>
+
 <body>
-  <h1>Pomodoro</h1>
+  <h1>The Amazing Pomodoro Timer</h1>
   <div class="content-container">
     <div id="timer-container" class="content-section">
       <div id="timer">
@@ -73,44 +86,35 @@
           >
         <span id="timer-counter">5:00</span>
         <div class="timer-controls">
-          <button id="start-btn" onclick="start_timer()">Start</button>
-          <button>Pause</button>
-          <button>Reset</button>
+          <button onclick="start_timer()">Start</button>
+          <button onclick='pause_timer()'>Pause</button>
+          <button onclick="reset_timer()">Reset</button>
         </div>
-      </div>
-      <div id="instructions">
-        <p>
-          Lots of instructions here. Many more instructions. All the instructions.
-          Lorem ipsum, etc. Lorem ipsum, etc. Lorem ipsum, etc. (Consider replacing
-          this filler text with real guidance or helpful instructions.)
-        </p>
-      </div>
-    </div>
-    <div id="todo-container" class="content-section">
-      <div>
-        <span>ToDo</span>
-        <div class="todo-list">
-          <ul id="task-list">
-            <li>Task 1 | Est. Time | Est. Pomodoros</li>
-            <li>Task 2 | Est. Time | Est. Pomodoros</li>
-          </ul>
-          <div id="task-addition">
-            <!-- Here is where tasks will be added -->
-            <input type="text" name="task-name" placeholder="Task Name">
-            <input type="text" name="task-est-time" placeholder="Est. Time">
-            <button>Add</button>
-          </div>
+        <div id="todo-container" class="content-section">
+            <div>
+                <span>ToDo</span>
+                <div class="todo-list">
+                    <ul id="task-list">
+                        <li>Task 1 | EST Time | Est Pomodoro</li>
+                        <li>Task 2 | EST Time | Est Pomodoro</li>
+                    </ul>
+                    <div id="task-addition">
+                        <!-- Here is where we will add the task -->
+                        <input type="text" name="task-name">
+                        <input type="text" name="task-est-time">
+                        <button>Add</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    //TIMER FUNCTIONALITY 
-    function convert_seconds(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const remaining = seconds % 60;
-      return minutes + ":" + remaining.toString().padStart(2, '0');
+    <script>
+        function convert_seconds(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            var remaining = seconds % 60;
+
+      return minutes+":"+remaining.toString().padStart(2, '0');
     }
 
     class Timer {
@@ -142,7 +146,20 @@
       }
 
       pauseTimer() {
-        // To be implemented
+        clearInterval(this.timer_loop);
+        this.timer_loop = null;
+        //console.log('Timer paused.');
+
+      }
+
+      resetTimer() {
+        clearInterval(this.timer_loop);
+        this.current = this.seconds;
+        this.elapsed = 0;
+        this.starttime = null;
+        this.sync_counter = 0;
+        this.display_dom.innerText = convert_seconds(this.current);
+
       }
 
       countDown() {
@@ -159,26 +176,67 @@
         this.finished();
       }
 
-     finished() {
-      if (this.current <= 0) {
-        this.current = 0;
-        this.display_dom.innerText = convert_seconds(this.current);
-        clearInterval(this.timer_loop);
-        this.state = "Stopped";
-      // Re-enable the start button when timer finishes
-      const startBtn = document.getElementById('start-btn');
-      if (startBtn) {
-        startBtn.disabled = false;
-      }
-      console.log("Timer should stop now.");
-                }
+      finished() {
+        if (this.current > 0) {
+          return;  // If we are not at the end of the countdown, do nothing
+        }
+
+        class Timer {
+            constructor(seconds, display_dom) {
+                this.seconds = seconds;
+                this.state = "Stopped";
+                this.current = this.seconds;
+                this.starttime = null;
+                this.elapsed = 0;
+                this.timer_loop = null;
+                this.sync_counter = 0;
+                this.display_dom = display_dom;
             }
 
-    }
+            startTimer() {
+                this.starttime = new Date().getTime();
+                this.timer_loop = setInterval((timer) => {
+                    if (timer.sync_counter % 10 == 0) {
+                        timer.timerSync();
+                        timer.sync_counter = 0;
+                    } else {
+                        timer.countDown();
+                    }
+                    timer.sync_counter++;
+                }, 1000, this);
+            }
 
-    let ptimer = null;
-    const timer_display = document.getElementById('timer-counter');
-    let seconds = 5 * 60;
+            pauseTimer() {
+
+            }
+
+            countDown() {
+                this.current = this.current - 1;
+                this.display_dom.innerText = convert_seconds(this.current);
+                this.finished();
+            }
+
+            timerSync() {
+                var elapsed = new Date().getTime() - this.starttime;
+                this.elapsed = Math.floor(elapsed / 1000);
+
+                this.current = this.seconds - this.elapsed;
+                this.display_dom.innerText = convert_seconds(this.current);
+                this.finished();
+            }
+
+            finished() {
+                if (this.current > 0) {
+                    return;  // If we are not at the end of the countdown, do nothing
+                }
+                clearInterval(this.timer_loop);
+                // Stop timer | Play Alarm
+                console.log("Timer should stop now.");
+            }
+        }
+
+        var ptimer = null;
+        var timer_select_dropdown = document.getElementById('timer-select');
 
    
     function start_timer() {
@@ -196,62 +254,21 @@
       ptimer = new Timer(seconds, timer_display);
       ptimer.startTimer();
 
-      document.getElementById('start-btn').disabled = true; // grey out button after one press, to be refreshed after pause or reset. 
+    }
+    
+    function pause_timer() {
+      if (ptimer) {
+        ptimer.pauseTimer();
+      }
+
+    }
+    function reset_timer() {
+      if (ptimer) {
+        ptimer.resetTimer();
+      }
     }
 
-    //TO-DO LIST FUNCTIONALITY
-    class toDoList{
-      constructor(listContainer){
-        this.tasks = []; // array to hold task objects
-        this.listContainer = listContainer;
-      }
-
-      addTask(name, estTime){
-        const task = {
-          name,
-          estTime: parseFloat(estTime),
-        };
-        this.tasks.push(task);
-        this.render();
-      }
-
-      /*calculateNumPomodoro(estTime, timerInterval) {
-        let timerValue = document.getElementById('timer-select').value;
-
-        if (timerValue === "custom"){
-          //...
-        }
-      }
-      */ 
-
-      render() {
-        // Clear existing list
-        this.listContainer.innerHTML = "";
-
-        this.tasks.forEach((task, index) => {
-          const li = document.createElement("li");
-          li.textContent = `${task.name} | ${task.estTime}`;
-          //li.textContent = `${task.name} | ${task.estTime} | <!--${calculateNumPomodoro(estTime, document.getElementById('timer-select').value)}
-          //for est. remainding pomodoros for tasks
-          this.listContainer.appendChild(li);
-        })
-
-      }
-    }
-    const list = new toDoList(document.getElementById("task-list"));
-
-    //ADD Button Functionality
-    document.querySelector("#task-addition button").addEventListener("click", () => {
-      const name = document.querySelector("input[name='task-name']").value.trim();
-      const estTime = document.querySelector("input[name='task-est-time']").value.trim();
-
-      if (!name || isNaN(estTime)){
-        alert("Please enter a valid task name and estimated time in minutes.");
-        return;
-      }
-
-      list.addTask(name, estTime);
-    })
   </script>
 </body>
+
 </html>
