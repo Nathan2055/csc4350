@@ -104,8 +104,8 @@
                     </ul>
                     <div id="task-addition">
                         <!-- Here is where we will add tasks -->
-                        <input type="text" name="task-name">
-                        <input type="text" name="task-est-time" placeholder="Est. time (minutes)">
+                        <input type="text" name="task-name" id="task-name">
+                        <input type="text" name="task-est-time" placeholder="Est. time (minutes)" id="task-time">
                         <button id="add-task-button">Add</button>
                     </div>
                 </div>
@@ -279,26 +279,54 @@
     }
   }
 
-  // Add task button logic
-  addTaskButton.addEventListener("click", function () {
-    const taskName = document.querySelector('input[name="task-name"]').value.trim();
-    const taskEstTime = document.querySelector('input[name="task-est-time"]').value.trim();
+function getTimerDuration() {
+  const selectValue = document.getElementById("timer-select").value;
+  if (selectValue === "custom") {
+    const customValue = parseInt(document.getElementById("custom-timer-input").value);
+    return isNaN(customValue) ? 5 : customValue;
+  } else {
+    return parseInt(selectValue);
+  }
+}
 
-    if (!taskName || !taskEstTime) return;
+//task button logic
+addTaskButton.addEventListener("click", function () {
+  const taskNameInput = document.getElementById('task-name');
+  const taskEstTimeInput = document.getElementById('task-time');
+  if (!taskNameInput.value || !taskEstTimeInput.value || parseInt(taskEstTimeInput.value) <= 0) {
+    alert("Please provide a task name and a valid estimated time.");
+      return;
+    }
 
-    const li = document.createElement("li");
-    li.textContent = `${taskName} | ${taskEstTime} min`;
-    taskList.appendChild(li);
+  const taskName = taskNameInput.value.trim();
+  const taskTime = parseInt(taskEstTimeInput.value);
+  const pomodoros = Math.ceil(taskTime / getTimerDuration());
+      
+  const li = document.createElement("li");
+  // create list
+  li.dataset.name = taskName;
+  li.dataset.time = taskTime;
+  // Create and append the checkbox
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.addEventListener("click", function() {
+    // When checkbox is clicked, remove the entire list item (its parent)
+    li.remove();
+    });
+  li.appendChild(checkbox);
 
-    // Clear fields
-    document.querySelector('input[name="task-name"]').value = "";
-    document.querySelector('input[name="task-est-time"]').value = "";
+  // Create and append the text content
+  const textNode = document.createTextNode(` ${taskName} | ${taskTime} min | ${pomodoros} pomodoros`);
+  li.appendChild(textNode);
+      
+  taskList.appendChild(li);
+
+taskNameInput.value = "";
+taskEstTimeInput.value = "";
   });
-
-  // Make timer functions global
-  window.start_timer = start_timer;
-  window.pause_timer = pause_timer;
-  window.reset_timer = reset_timer;
+window.start_timer = start_timer;
+window.pause_timer = pause_timer;
+window.reset_timer = reset_timer;
 });
   </script>
 </body>
