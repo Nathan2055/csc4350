@@ -2,30 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Countdown Timer</title>
+  <title>Pomodoro Timer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * {
       margin: 0 auto;
       padding: 0;
+      box-sizing: border-box;
     }
+    
     body {
-      font-family: sans-serif;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
       text-align: center;
+      background-image: url('background.png');
+      background-size:contain;
+      background-repeat:repeat;
+      font-family: 'Segoe UI', sans-serif;
+      color: #374151;
+      padding: 2rem;
+      color: #374151;
+      padding: 2rem;
     }
+    
     #timer {
-      font-size: 48px;
+      font-size: 50px;
+      
     }
     .content-container {
       display: flex;
-      border: 1px solid blue;
+      border-radius: 20px;
     }
     .content-section {
-      border: 1px solid green;
+      border: 1px solid rgb(100, 99, 101);
       min-height: 100px;
+      box-shadow: 10px;
     }
 
     #timer-container {
-      width: 40%;
+      width: 60%;
+      box-shadow: 10px;
+      background-color: #e1e5ef;
+      border-right: 1px solid #54575d;
     }
 
     #todo-container {
@@ -38,15 +55,36 @@
       padding: 10px;
     }
     #timer-select {
-      margin-left: 5px;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 3rem;
+      color: #6857b7;
+      
+      
     }
     .timer-controls {
       width: 100%;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
     }
+
     button {
-      padding: 10px;
-      width: 25%;
+      width: 30%;
+      padding: 15px;
+      background-color: #6366f1;
+      box-shadow: 10px;
+      color: rgb(132, 103, 103);
+      border: 5px solid #66629d;
+      border-radius: 0.500rem;
+      cursor: pointer;
+      transition: background-color 0.1s;
+      box-shadow: 0 10px 10px rgba(1, 0, 0, 0.297);
     }
+
+    button:hover {
+      background-color: #a7a6b8;
+    }
+
     ul {
       text-decoration: none;
       list-style: none;
@@ -54,15 +92,16 @@
   </style>
 </head>
 <body>
-  <h1>Pomodoro</h1>
+  <h1 class="text-4xl font-bold text-purple-600 mb-6">Pomodoro Timer</h1>
   <div class="content-container">
     <div id="timer-container" class="content-section">
       <div id="timer">
         <select id="timer-select">
-          <option value="5">5 Minute</option>
-          <option value="10">10 Minute</option>
+          <option value="5">5 Minutes</option>
+          <option value="10">10 Minutes</option>
           <option value="custom">Custom</option>
         </select>
+
         <span id="timer-counter">
           5:00
         </span>
