@@ -20,8 +20,6 @@
       font-family: 'Segoe UI', sans-serif;
       color: #374151;
       padding: 2rem;
-      color: #374151;
-      padding: 2rem;
     }
     
   h1 {
@@ -52,6 +50,8 @@
 
     #todo-container {
       width: 60%;
+      background-color: #dadbdd;
+      font-size: 1.5vw;
     }
     .content-section > div {
       border: 1px solid black;
@@ -76,12 +76,12 @@
 
     button {
       width: 30%;
-      font-size: 1.2vw;
+      font-size: 2vw;
       padding: 15px;
       background-color: #6366f1;
-      box-shadow: 10px;
+      box-shadow: 8px;
       color: rgb(132, 103, 103);
-      border: 5px solid #66629d;
+      border: 3px solid #66629d;
       border-radius: 0.500rem;
       cursor: pointer;
       transition: background-color 0.1s;
@@ -135,9 +135,21 @@
           </ul>
           <div id="task-addition">
             <!-- Here is where we will add the task -->
-            <input type="text" name="task-name">
-            <input type="text" name="task-est-time">
-            <button>Add</button>
+            <input
+              type="text"
+              name="task-name"
+              placeholder="Task name"
+              class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded"
+            />
+            <input
+              type="text"
+              name="task-est-time"
+              placeholder="Est. Time"
+              class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded"
+            />
+            
+          <br></br>  
+          <button>Add</button>
           </div>
         </div>
       </div>
