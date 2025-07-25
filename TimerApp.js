@@ -14,6 +14,10 @@ app.get("/background.png", (req, res) => {
     res.sendFile(__dirname + "/public/background.png");
 })
 
+app.get("/tailwindcss-3.4.14.js", (req, res) => {
+    res.sendFile(__dirname + "/public/tailwindcss-3.4.14.js");
+})
+
 app.listen(port, () =>{
     console.log('App listening on port ' + port);
 })
