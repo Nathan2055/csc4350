@@ -10,6 +10,10 @@ app.get("/pomodoro-styles.css", (req, res) => {
     res.sendFile(__dirname + "/public/pomodoro-styles.css");
 })
 
+app.get("/background.png", (req, res) => {
+    res.sendFile(__dirname + "/public/background.png");
+})
+
 app.listen(port, () =>{
     console.log('App listening on port ' + port);
 })
