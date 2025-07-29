@@ -35,41 +35,26 @@
     <!-- ToDo section -->
     <div id="todo-container" class="content-section">
       <div>
-        <span>ToDo</span>
+        <span>Task List</span>
         <div class="todo-list">
           <ul id="task-list">
             <li>Task 1 | EST Time | Est Pomodoro</li>
+            <li>Task 2 | EST Time | Est Pomodoro</li>
           </ul>
           <div id="task-addition">
-            <!-- Here is where we will add tasks -->
-            <input type="text" name="task-name" id="task-name">
-            <input type="text" name="task-est-time" placeholder="Est. time (minutes)" id="task-time">
-            <button id="add-task-button">Add</button>
+            <!-- Here is where we will add the task -->
+            <input type="text" name="task-name" placeholder="Task name"
+              class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
+            <input type="text" name="task-est-time" placeholder="Est. Time"
+              class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
+            <br />
+            <button>Add</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div id="todo-container" class="content-section">
-    <div>
-      <span>Task List</span>
-      <div class="todo-list">
-        <ul id="task-list">
-          <li>Task 1 | EST Time | Est Pomodoro</li>
-          <li>Task 2 | EST Time | Est Pomodoro</li>
-        </ul>
-        <div id="task-addition">
-          <!-- Here is where we will add the task -->
-          <input type="text" name="task-name" placeholder="Task name"
-            class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
-          <input type="text" name="task-est-time" placeholder="Est. Time"
-            class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
-          <br />
-          <button>Add</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
   </div>
 
   <audio id="alarm-audio">
