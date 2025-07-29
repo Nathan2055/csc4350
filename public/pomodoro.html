@@ -1,296 +1,299 @@
 <!DOCTYPE html>
 <html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="pomodoro-styles.css" />
+    <!-- For development: Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- TODO: this should be changed to a production-ready Tailwind build -->
-  <script src="tailwindcss-3.4.14.js"></script>
-  <link rel="stylesheet" href="pomodoro-styles.css" />
-  <title>Pomodoro Timer</title>
-</head>
-
-<body>
-  <h1 class="text-7xl font-bold mb-6">Pomodoro Timer</h1>
-  <div class="content-container">
-    <!-- Timer section -->
-    <div id="timer-container" class="content-section">
-      <div id="timer">
-        <select id="timer-select">
-          <option value="5">5 Minutes</option>
-          <option value="25">25 Minutes</option>
-          <option value="custom">Custom</option>
-        </select>
-        <input type="number" id="custom-timer-input" placeholder="Enter custom time (min)"
-          style="display: none; margin-top: 10px" />
-        <span id="timer-counter">5:00</span>
-        <div class="timer-controls">
-          <button id="start-btn" onclick="start_timer()">Start</button>
-          <button id="pause-btn" onclick='pause_timer()'>Pause</button>
-          <button id="reset-btn" onclick="reset_timer()">Reset</button>
+  <body>
+    <h1 class="text-7xl font-bold mb-6">Pomodoro Timer</h1>
+    <div class="content-container">
+      <!-- Timer Section -->
+      <div id="timer-container" class="content-section">
+        <div id="timer">
+          <select id="timer-select">
+            <option value="5">5 Minutes</option>
+            <option value="25">25 Minutes</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input
+            type="number"
+            id="custom-timer-input"
+            placeholder="Enter custom time (min)"
+            style="display: none; margin-top: 5px"
+          />
+          <span id="timer-counter">5:00</span>
+          <div class="timer-controls">
+            <button id="start-btn">Start</button>
+            <button id="pause-btn">Pause</button>
+            <button id="reset-btn">Reset</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ToDo section -->
-    <div id="todo-container" class="content-section">
-      <div>
-        <span>Task List</span>
-        <div class="todo-list">
-          <ul id="task-list">
-            <li>Task 1 | EST Time | Est Pomodoro</li>
-            <li>Task 2 | EST Time | Est Pomodoro</li>
-          </ul>
-          <div id="task-addition">
-            <!-- Here is where we will add the task -->
-            <input type="text" name="task-name" placeholder="Task name"
-              class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
-            <input type="text" name="task-est-time" placeholder="Est. Time"
-              class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
-            <br />
-            <button>Add</button>
+      <!-- Task Section -->
+      <div id="todo-container" class="content-section">
+        <div>
+          <span>Task List</span>
+          <div class="todo-list">
+            <ul id="task-list">
+              <li>Task 1 | EST Time | Est Pomodoro</li>
+            </ul>
+            <div id="task-addition">
+              <input
+                id="task-name"
+                type="text"
+                name="task-name"
+                placeholder="Task name"
+                class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded"
+              />
+              <input
+                id="task-time"
+                type="text"
+                name="task-est-time"
+                placeholder="Est. Time"
+                class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded"
+              />
+              <br />
+              <button id="add-task-button">Add</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  </div>
+    <audio id="alarm-audio">
+      <source src="/alarm.mp3" type="audio/mpeg" />
+    </audio>
 
-  <audio id="alarm-audio">
-    <source src="/alarm.mp3" type="audio/mpeg" />
-  </audio>
-
-  <script>
-    // TIMER FUNCTIONALITY
-    function convert_seconds(seconds) {
-      var minutes = Math.floor(seconds / 60);
-      var remaining = seconds % 60;
-      return minutes + ":" + remaining.toString().padStart(2, '0');
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const timerDisplay = document.getElementById("timer-counter");
-      const addTaskButton = document.getElementById("add-task-button");
-      const taskList = document.getElementById("task-list");
-      const timerSelect = document.getElementById("timer-select");
-      const customTimerInput = document.getElementById("custom-timer-input");
-
-      timerSelect.addEventListener("change", () => {
-        if (timerSelect.value === "custom") {
-          customTimerInput.style.display = "block";
-        } else {
-          customTimerInput.style.display = "none";
-        }
-      });
-
-      let ptimer = null;
-
-      class Timer {
-        constructor(seconds, display_dom) {
-          this.seconds = seconds;
-          this.state = "Stopped";
-          this.current = this.seconds;
-          this.starttime = null;
-          this.elapsed = 0;
-          this.timer_loop = null;
-          this.sync_counter = 0;
-          this.display_dom = display_dom;
-        }
-
-        startTimer() {
-          if (this.state === "Running") return;
-
-          if (this.state === "Paused") {
-            this.starttime = new Date().getTime() - (this.elapsed * 1000);
-          } else {
-            this.starttime = new Date().getTime();
-            this.elapsed = 0;
-            this.current = this.seconds;
-          }
-
-          this.state = "Running"
-
-          this.timer_loop = setInterval((timer) => {
-            if (timer.sync_counter % 10 === 0) {
-              timer.timerSync();
-              timer.sync_counter = 0;
-            } else {
-              timer.countDown();
-            }
-            timer.sync_counter++;
-          }, 1000, this);
-        }
-
-        stopTimer() {
-          if (this.timer_loop) {
-            clearInterval(this.timer_loop);
-            this.timer_loop = null;
-          }
-          this.state = "Stopped";
-        }
-
-        pauseTimer() {
-          if (this.timer_loop) {
-            clearInterval(this.timer_loop);
-            this.timer_loop = null;
-            this.state = "Paused";
-          }
-        }
-
-        resetTimer() {
-          if (this.timer_loop) {
-            clearInterval(this.timer_loop);
-            this.timer_loop = null;
-          }
-          this.current = this.seconds;
-          this.elapsed = 0;
-          this.starttime = null;
-          this.sync_counter = 0;
-          this.state = "Stopped";
-          this.display_dom.innerText = convert_seconds(this.current);
-        }
-
-        countDown() {
-          this.current -= 1;
-          this.display_dom.innerText = convert_seconds(this.current);
-          if (this.current === 10) {
-            this.playAlarm();
-          }
-
-          this.finished();
-        }
-
-        timerSync() {
-          const elapsed = new Date().getTime() - this.starttime;
-          this.elapsed = Math.floor(elapsed / 1000);
-          this.current = this.seconds - this.elapsed;
-          this.display_dom.innerText = convert_seconds(this.current);
-          this.finished();
-        }
-
-        finished() {
-          if (this.current > 0) return;
-          clearInterval(this.timer_loop);
-          this.timer_loop = null;
-          this.state = "Stopped";
-          this.display_dom.innerText = "0:00"
-          document.getElementById('start-btn').disabled = false; // Re-enable start button
-          console.log("Timer should stop now.");
-        }
-
-        playAlarm() {
-          const alarm = document.getElementById("alarm-audio");
-          if (alarm) {
-            alarm.play().catch((error) => {
-              console.error("Alarm playback failed:", error);
-            });
-          }
-        }
+    <script>
+      // TIMER FUNCTIONALITY
+      function convert_seconds(seconds) {
+        var minutes = Math.floor(seconds / 60);
+        var remaining = seconds % 60;
+        return minutes + ":" + remaining.toString().padStart(2, "0");
       }
 
-      function start_timer() {
-        document.getElementById('start-btn').disabled = true; // Grey out button after one start; to be refreshed after pause or reset
+      document.addEventListener("DOMContentLoaded", function () {
+        const timerDisplay = document.getElementById("timer-counter");
+        const addTaskButton = document.getElementById("add-task-button");
+        const taskList = document.getElementById("task-list");
+        const timerSelect = document.getElementById("timer-select");
+        const customTimerInput = document.getElementById("custom-timer-input");
 
-        const select_value = document.getElementById('timer-select').value;
-        const custom_input = document.getElementById('custom-timer-input').value;
+        timerSelect.addEventListener("change", () => {
+          customTimerInput.style.display =
+            timerSelect.value === "custom" ? "block" : "none";
+        });
 
-        // If there's an existing timer and it's paused, resume it
-        if (ptimer && ptimer.state === "Paused") {
-          ptimer.startTimer(); // Start button disabling is in this method
-          return;
+        let ptimer = null;
+
+        class Timer {
+          constructor(seconds, display_dom) {
+            this.seconds = seconds;
+            this.state = "Stopped";
+            this.current = this.seconds;
+            this.starttime = null;
+            this.elapsed = 0;
+            this.timer_loop = null;
+            this.sync_counter = 0;
+            this.display_dom = display_dom;
+          }
+
+          startTimer() {
+            if (this.state === "Running") return;
+
+            if (this.state === "Paused") {
+              this.starttime = new Date().getTime() - this.elapsed * 1000;
+            } else {
+              this.starttime = new Date().getTime();
+              this.elapsed = 0;
+              this.current = this.seconds;
+            }
+
+            this.state = "Running";
+
+            this.timer_loop = setInterval(
+              (timer) => {
+                if (timer.sync_counter % 10 === 0) {
+                  timer.timerSync();
+                  timer.sync_counter = 0;
+                } else {
+                  timer.countDown();
+                }
+                timer.sync_counter++;
+              },
+              1000,
+              this
+            );
+          }
+
+          stopTimer() {
+            if (this.timer_loop) {
+              clearInterval(this.timer_loop);
+              this.timer_loop = null;
+            }
+            this.state = "Stopped";
+          }
+
+          pauseTimer() {
+            if (this.timer_loop) {
+              clearInterval(this.timer_loop);
+              this.timer_loop = null;
+              this.state = "Paused";
+            }
+          }
+
+          resetTimer() {
+            if (this.timer_loop) {
+              clearInterval(this.timer_loop);
+              this.timer_loop = null;
+            }
+            this.current = this.seconds;
+            this.elapsed = 0;
+            this.starttime = null;
+            this.sync_counter = 0;
+            this.state = "Stopped";
+            this.display_dom.innerText = convert_seconds(this.current);
+          }
+
+          countDown() {
+            this.current -= 1;
+            this.display_dom.innerText = convert_seconds(this.current);
+            if (this.current === 10) {
+              this.playAlarm();
+            }
+            this.finished();
+          }
+
+          timerSync() {
+            const elapsed = new Date().getTime() - this.starttime;
+            this.elapsed = Math.floor(elapsed / 1000);
+            this.current = this.seconds - this.elapsed;
+            this.display_dom.innerText = convert_seconds(this.current);
+            this.finished();
+          }
+
+          finished() {
+            if (this.current > 0) return;
+            clearInterval(this.timer_loop);
+            this.timer_loop = null;
+            this.state = "Stopped";
+            this.display_dom.innerText = "0:00";
+            document.getElementById("start-btn").disabled = false;
+            console.log("Timer should stop now.");
+          }
+
+          playAlarm() {
+            const alarm = document.getElementById("alarm-audio");
+            if (alarm) {
+              alarm.play().catch((error) => {
+                console.error("Alarm playback failed:", error);
+              });
+            }
+          }
         }
 
-        // Stop any existing timer before creating a new one
-        if (ptimer) {
-          ptimer.stopTimer();
+        function getTimerDuration() {
+          const selectValue = timerSelect.value;
+          if (selectValue === "custom") {
+            const custom = parseInt(customTimerInput.value);
+            return isNaN(custom) ? 5 : custom;
+          } else {
+            return parseInt(selectValue);
+          }
         }
 
-        let seconds;
+        function start_timer() {
+          document.getElementById("start-btn").disabled = true;
 
-        if (select_value === "custom") {
-          const custom = parseInt(custom_input || "5");
-          if (isNaN(custom) || custom <= 0) {
-            alert("Please enter a valid custom time in minutes.");
+          const select_value = timerSelect.value;
+          const custom_input = customTimerInput.value;
+
+          if (ptimer && ptimer.state === "Paused") {
+            ptimer.startTimer();
             return;
           }
-          seconds = custom * 60;
-        } else {
-          seconds = parseInt(select_value) * 60;
+
+          if (ptimer) {
+            ptimer.stopTimer();
+          }
+
+          let seconds;
+          if (select_value === "custom") {
+            const custom = parseInt(custom_input || "5");
+            if (isNaN(custom) || custom <= 0) {
+              alert("Please enter a valid custom time in minutes.");
+              return;
+            }
+            seconds = custom * 60;
+          } else {
+            seconds = parseInt(select_value) * 60;
+          }
+
+          ptimer = new Timer(seconds, timerDisplay);
+          timerDisplay.innerText = convert_seconds(seconds);
+          ptimer.startTimer();
         }
 
-        ptimer = new Timer(seconds, timerDisplay);
-        timerDisplay.innerText = convert_seconds(seconds);
-        ptimer.startTimer();
-      }
-
-      function pause_timer() {
-        if (ptimer && ptimer.state === "Running") {
-          ptimer.pauseTimer();
-          document.getElementById('start-btn').disabled = false;
-          ptimer.state = "Paused";
-        }
-      }
-
-      function reset_timer() {
-        if (ptimer) {
-          ptimer.resetTimer();
-          document.getElementById('start-btn').disabled = false;
-          ptimer.state = "Running";
-        }
-      }
-
-      function getTimerDuration() {
-        const selectValue = document.getElementById("timer-select").value;
-        if (selectValue === "custom") {
-          const customValue = parseInt(document.getElementById("custom-timer-input").value);
-          return isNaN(customValue) ? 5 : customValue;
-        } else {
-          return parseInt(selectValue);
-        }
-      }
-
-      // Task button logic
-      addTaskButton.addEventListener("click", function () {
-        const taskNameInput = document.getElementById('task-name');
-        const taskEstTimeInput = document.getElementById('task-time');
-        if (!taskNameInput.value || !taskEstTimeInput.value || parseInt(taskEstTimeInput.value) <= 0) {
-          alert("Please provide a task name and a valid estimated time.");
-          return;
+        function pause_timer() {
+          if (ptimer && ptimer.state === "Running") {
+            ptimer.pauseTimer();
+            document.getElementById("start-btn").disabled = false;
+          }
         }
 
-        const taskName = taskNameInput.value.trim();
-        const taskTime = parseInt(taskEstTimeInput.value);
-        const pomodoros = Math.ceil(taskTime / getTimerDuration());
+        function reset_timer() {
+          if (ptimer) {
+            ptimer.resetTimer();
+            document.getElementById("start-btn").disabled = false;
+          }
+        }
 
-        const li = document.createElement("li");
-        // Create list
-        li.dataset.name = taskName;
-        li.dataset.time = taskTime;
-        // Create and append the checkbox
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.addEventListener("click", function () {
-          // When checkbox is clicked, remove the entire list item (its parent)
-          li.remove();
+        // Button events
+        document.getElementById("start-btn").addEventListener("click", start_timer);
+        document.getElementById("pause-btn").addEventListener("click", pause_timer);
+        document.getElementById("reset-btn").addEventListener("click", reset_timer);
+
+        // Task list
+        addTaskButton.addEventListener("click", function () {
+          const taskNameInput = document.getElementById("task-name");
+          const taskEstTimeInput = document.getElementById("task-time");
+
+          const taskName = taskNameInput.value.trim();
+          const taskTime = parseInt(taskEstTimeInput.value);
+
+          if (!taskName || isNaN(taskTime) || taskTime <= 0) {
+            alert("Please provide a valid task name and estimated time.");
+            return;
+          }
+
+          const pomodoros = Math.ceil(taskTime / getTimerDuration());
+
+          const li = document.createElement("li");
+          li.dataset.name = taskName;
+          li.dataset.time = taskTime;
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.addEventListener("click", () => li.remove());
+          li.appendChild(checkbox);
+
+          const textNode = document.createTextNode(
+            ` ${taskName} | ${taskTime} min | ${pomodoros} pomodoros`
+          );
+          li.appendChild(textNode);
+
+          taskList.appendChild(li);
+
+          taskNameInput.value = "";
+          taskEstTimeInput.value = "";
         });
-        li.appendChild(checkbox);
-
-        // Create and append the text content
-        const textNode = document.createTextNode(` ${taskName} | ${taskTime} min | ${pomodoros} pomodoros`);
-        li.appendChild(textNode);
-
-        taskList.appendChild(li);
-
-        taskNameInput.value = "";
-        taskEstTimeInput.value = "";
       });
-      window.start_timer = start_timer;
-      window.pause_timer = pause_timer;
-      window.reset_timer = reset_timer;
-    });
-  </script>
-
-</body>
-
+    </script>
+  </body>
 </html>
