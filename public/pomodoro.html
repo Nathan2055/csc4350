@@ -3,72 +3,15 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Countdown Timer</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin: 0 auto;
-    }
-    #timer {
-      font-size: 48px;
-    }
-    .content-container {
-      display: flex;
-      border: 1px solid blue;
-    }
-    .content-section {
-      border: 1px solid green;
-      min-height: 100px;
-    }
-    #timer-container {
-      width: 40%;
-    }
-    #todo-container {
-      width: 60%;
-    }
-    .content-section > div {
-      border: 1px solid black;
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-    }
-    #timer-select {
-      margin-left: 5px;
-    }
-    .timer-controls {
-      width: 100%;
-      margin-top: 10px;
-    }
-    button {
-      padding: 10px;
-      width: 25%;
-      margin: 5px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-  </style>
-
-<!-- TODO: merge CSS
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" as="style" type="text/css" />
-    <link rel="preload" href="pomodoro-styles.css" as="style" type="text/css" />
-    <link rel="stylesheet" href="pomodoro-styles.css" />
--->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- TODO: this should be changed to a production-ready Tailwind build -->
+  <script src="tailwindcss-3.4.14.js"></script>
+  <link rel="stylesheet" href="pomodoro-styles.css" />
+  <title>Pomodoro Timer</title>
 </head>
 
 <body>
-  <h1>The Amazing Pomodoro Timer</h1>
+  <h1 class="text-7xl font-bold mb-6">Pomodoro Timer</h1>
   <div class="content-container">
     <!-- Timer section-->
     <div id="timer-container" class="content-section">
@@ -78,12 +21,8 @@
           <option value="25">25 Minutes</option>
           <option value="custom">Custom</option>
         </select>
-        <input
-          type= "number"
-          id= "custom-timer-input"
-          placeholder= "Enter custom time (min)"
-          style= "display: none; margin-top: 10px" 
-          />
+        <input type="number" id="custom-timer-input" placeholder="Enter custom time (min)"
+          style="display: none; margin-top: 10px" />
         <span id="timer-counter">5:00</span>
         <div class="timer-controls">
           <button id="start-btn" onclick="start_timer()">Start</button>
@@ -91,26 +30,50 @@
           <button id="reset-btn" onclick="reset_timer()">Reset</button>
         </div>
       </div>
-      </div>
-
-      <!--ToDo section-->
-        <div id="todo-container" class="content-section">
-            <div>
-                <span>ToDo</span>
-                <div class="todo-list">
-                    <ul id="task-list">
-                        <li>Task 1 | EST Time | Est Pomodoro</li>
-                    </ul>
-                    <div id="task-addition">
-                        <!-- Here is where we will add tasks -->
-                        <input type="text" name="task-name" id="task-name">
-                        <input type="text" name="task-est-time" placeholder="Est. time (minutes)" id="task-time">
-                        <button id="add-task-button">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+
+
+    <!-- ToDo section -->
+    <div id="todo-container" class="content-section">
+      <div>
+        <span>ToDo</span>
+        <div class="todo-list">
+          <ul id="task-list">
+            <li>Task 1 | EST Time | Est Pomodoro</li>
+          </ul>
+          <div id="task-addition">
+            <!-- Here is where we will add tasks -->
+            <input type="text" name="task-name" id="task-name">
+            <input type="text" name="task-est-time" placeholder="Est. time (minutes)" id="task-time">
+            <button id="add-task-button">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="todo-container" class="content-section">
+    <div>
+      <span>Task List</span>
+      <div class="todo-list">
+        <ul id="task-list">
+          <li>Task 1 | EST Time | Est Pomodoro</li>
+          <li>Task 2 | EST Time | Est Pomodoro</li>
+        </ul>
+        <div id="task-addition">
+          <!-- Here is where we will add the task -->
+          <input type="text" name="task-name" placeholder="Task name"
+            class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
+          <input type="text" name="task-est-time" placeholder="Est. Time"
+            class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
+
+          <br></br>
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  
     <audio id="alarm-audio">
       <source src="/alarm.mp3" type="audio/mpeg" />
     </audio>
