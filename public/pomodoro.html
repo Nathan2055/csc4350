@@ -65,7 +65,6 @@
     <link rel="preload" href="pomodoro-styles.css" as="style" type="text/css" />
     <link rel="stylesheet" href="pomodoro-styles.css" />
 -->
-    <title>Countdown Timer</title>
 </head>
 
 <body>
@@ -76,7 +75,7 @@
       <div id="timer">
         <select id="timer-select">
           <option value="5">5 Minutes</option>
-          <option value="10">10 Minutes</option>
+          <option value="25">25 Minutes</option>
           <option value="custom">Custom</option>
         </select>
         <input
@@ -112,6 +111,9 @@
             </div>
         </div>
     </div>
+    <audio id="alarm-audio">
+      <source src="/alarm.mp3" type="audio/mpeg" />
+    </audio>
 
     <script>
     //TIMER FUNCTIONALITY
@@ -206,6 +208,10 @@
     countDown() {
       this.current -= 1;
       this.display_dom.innerText = convert_seconds(this.current);
+      if (this.current === 10) {
+        this.playAlarm();
+      }
+      
       this.finished();
     }
 
@@ -223,8 +229,17 @@
       this.timer_loop = null;
       this.state = "Stopped";
       this.display_dom.innerText = "0:00"
-      document.getElementById('start-btn').disabled = false; // reneable start btn
+      document.getElementById('start-btn').disabled = false; // re-enable start btn
       console.log("Timer should stop now.");
+    }
+
+    playAlarm() {
+      const alarm = document.getElementById("alarm-audio");
+      if (alarm) {
+        alarm.play().catch((error) => {
+          console.error("Alarm playback failed:", error);
+        });
+      }
     }
   }
 
