@@ -6,10 +6,10 @@
     <!-- TODO: this should be changed to a production-ready Tailwind build -->
     <script src="tailwindcss-3.4.14.js"></script>
     <link rel="stylesheet" href="pomodoro-styles.css" />
-    <title>Countdown Timer</title>
+    <title>Pomodoro Timer</title>
 </head>
 <body>
-  <h1 class="text-4xl font-bold text-purple-600 mb-6">The Amazing Pomodoro Timer</h1>
+  <h1 class="text-7xl font-bold mb-6">Pomodoro Timer</h1>
   <div class="content-container">
     <div id="timer-container" class="content-section">
       <div id="timer">
@@ -34,12 +34,15 @@
         </div>
       </div>
       <div id="instructions">
-        <p>Lots of instructions here. Many more instructions. All the instructions. Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc Loreum ipsum etc etc etc </p>
+        <p>
+        Use this Pomodoro timer to reduce mental fatigue and distractions by working in short, focused bursts. <br></br>
+        Simply enter what tasks you'd like to get done, set the how long you'd like to work for and start the timer! 
+        </p>
       </div>
     </div>
     <div id="todo-container" class="content-section">
       <div>
-        <span>ToDo</span>
+        <span>Task List</span> 
         <div class="todo-list">
           <ul id="task-list">
             <li>Task 1 | EST Time | Est Pomodoro</li>
@@ -47,9 +50,21 @@
           </ul>
           <div id="task-addition">
             <!-- Here is where we will add the task -->
-            <input type="text" name="task-name">
-            <input type="text" name="task-est-time">
-            <button>Add</button>
+            <input
+              type="text"
+              name="task-name"
+              placeholder="Task name"
+              class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded"
+            />
+            <input
+              type="text"
+              name="task-est-time"
+              placeholder="Est. Time"
+              class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded"
+            />
+            
+          <br></br>  
+          <button>Add</button>
           </div>
         </div>
       </div>

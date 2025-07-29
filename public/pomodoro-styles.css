@@ -1,5 +1,5 @@
 * {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
 }
@@ -14,9 +14,13 @@ body {
     background-image: url('background.png');
     background-size: contain;
     background-repeat: repeat;
-    margin: 0 auto;
     color: #374151;
     padding: 2rem;
+}
+
+h1 {
+    color: #4b5563;
+    margin-bottom: 1.5rem;
 }
 
 #timer {
@@ -43,9 +47,11 @@ body {
 
 #todo-container {
     width: 60%;
+    background-color: #dadbdd;
+    font-size: 1.5vw;
 }
 
-.content-section > div {
+.content-section>div {
     border: 1px solid black;
     display: flex;
     flex-direction: column;
@@ -63,6 +69,7 @@ body {
 }
 
 .timer-controls {
+    font-size: 1.2vw;
     width: 100%;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -75,11 +82,12 @@ button {
     margin: 5px;
     */
     width: 30%;
+    font-size: 2vw;
     padding: 15px;
     background-color: #6366f1;
-    box-shadow: 10px;
+    box-shadow: 8px;
     color: rgb(132, 103, 103);
-    border: 5px solid #66629d;
+    border: 3px solid #66629d;
     border-radius: 0.500rem;
     cursor: pointer;
     transition: background-color 0.1s;
