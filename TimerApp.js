@@ -1,10 +1,14 @@
-const express = require("express")
-const app = express()
-const port = 3000
+const express = require("express");
+const app = express();
+const port = 3000;
 
+// Serve all static files in /public (HTML, CSS, JS, MP3, etc.)
+app.use(express.static(__dirname + "/public"));
+
+// Serve the main HTML page
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/public/pomodoro.html");
-})
+  res.sendFile(__dirname + "/public/pomodoro.html");
+});
 
 app.get("/pomodoro-styles.css", (req, res) => {
     res.sendFile(__dirname + "/public/pomodoro-styles.css");

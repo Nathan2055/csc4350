@@ -18,7 +18,7 @@
       <div id="timer">
         <select id="timer-select">
           <option value="5">5 Minutes</option>
-          <option value="10">10 Minutes</option>
+          <option value="25">25 Minutes</option>
           <option value="custom">Custom</option>
         </select>
         <input type="number" id="custom-timer-input" placeholder="Enter custom time (min)"
@@ -31,6 +31,9 @@
         </div>
       </div>
     </div>
+    <audio id="alarm-audio">
+      <source src="/alarm.mp3" type="audio/mpeg" />
+    </audio>
 
     <!-- ToDo section -->
     <div id="todo-container" class="content-section">
@@ -237,6 +240,68 @@
           document.getElementById('start-btn').disabled = false;
           ptimer.state = "Running";
         }
+    countDown() {
+      this.current -= 1;
+      this.display_dom.innerText = convert_seconds(this.current);
+      if (this.current === 10) {
+        this.playAlarm();
+      }
+      
+      this.finished();
+    }
+
+    timerSync() {
+      const elapsed = new Date().getTime() - this.starttime;
+      this.elapsed = Math.floor(elapsed / 1000);
+      this.current = this.seconds - this.elapsed;
+      this.display_dom.innerText = convert_seconds(this.current);
+      this.finished();
+    }
+
+    finished() {
+      if (this.current > 0) return;
+      clearInterval(this.timer_loop);
+      this.timer_loop = null;
+      this.state = "Stopped";
+      this.display_dom.innerText = "0:00"
+      document.getElementById('start-btn').disabled = false; // re-enable start btn
+      console.log("Timer should stop now.");
+    }
+
+    playAlarm() {
+      const alarm = document.getElementById("alarm-audio");
+      if (alarm) {
+        alarm.play().catch((error) => {
+          console.error("Alarm playback failed:", error);
+        });
+      }
+    }
+  }
+
+  function start_timer() {
+    document.getElementById('start-btn').disabled = true; // grey out after one start, to be refreshed after pause or reset.
+
+    const select_value = document.getElementById('timer-select').value;
+    const custom_input = document.getElementById('custom-timer-input').value;
+
+    // If there's an existing timer and it's paused, resume it
+    if (ptimer && ptimer.state === "Paused") {
+      ptimer.startTimer(); // start btn disabling in this method
+      return;
+    }
+
+    // Stop any existing timer before creating a new one
+    if (ptimer) {
+      ptimer.stopTimer();
+    }
+
+    let seconds;
+
+    if (select_value === "custom") {
+      const custom = parseInt(custom_input || "5");
+      if (isNaN(custom) || custom <= 0) {
+        alert("Please enter a valid custom time in minutes.");
+        return;
       }
 
       function getTimerDuration() {
