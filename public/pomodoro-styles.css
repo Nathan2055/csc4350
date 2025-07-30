@@ -109,6 +109,16 @@ button:hover {
     background-color: #a7a6b8;
 }
 
+.custom-border {
+  border: 3px solid #66629d; 
+  border-radius: 0.5rem;     
+  color: rgb(132, 103, 103);
+  box-shadow: 0 4px 6px rgba(1, 0, 0, 0.2);
+  padding: 0.25rem 0.5rem;
+  outline: none;
+}
+
+
 ul {
     text-decoration: none;
     list-style: none;
