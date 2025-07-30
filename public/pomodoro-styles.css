@@ -68,10 +68,13 @@ h1 {
 #timer-select {
     font-size: 2rem;
     font-weight: bold;
-    color: #6857b7;
+    color: #66629d;
     margin-top: 5px;
     margin-left: 5rem;
     margin-right: 5rem;
+    border: 3px solid #66629d;
+    border-radius: 0.500rem;
+    box-shadow: 0 10px 10px rgba(1, 0, 0, 0.3);
 }
 
 #custom-timer-input {
@@ -95,7 +98,7 @@ button {
     width: 30%;
     font-size: 2vw;
     padding: 15px;
-    background-color: #6366f1;
+    background-color: #66629d;
     box-shadow: 8px;
     color: #846767;
     border: 3px solid #66629d;
