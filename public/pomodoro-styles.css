@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     margin: 0 auto;
     padding: 0;
@@ -5,7 +7,7 @@
 }
 
 body {
-    font-family: Verdana, Geneva, Tahoma, 'Segoe UI', sans-serif;
+    font-family: "Noto Sans", sans-serif;
     text-align: center;
     background-image: url('background.png');
     background-size: contain;
