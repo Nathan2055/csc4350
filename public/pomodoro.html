@@ -24,7 +24,8 @@
             type="number"
             id="custom-timer-input"
             placeholder="Enter custom time (min)"
-            style="display: none; margin-top: 5px"
+            style="display: none; margin-top: -2px"
+            class="custom-border text-sm w-40"
           />
           <span id="timer-counter">5:00</span>
           <div class="timer-controls">
@@ -264,6 +265,8 @@
           const taskNameInput = document.getElementById("task-name");
           const taskEstTimeInput = document.getElementById("task-time");
 
+          if (!taskName || !taskTime) return;
+          
           const taskName = taskNameInput.value.trim();
           const taskTime = parseInt(taskEstTimeInput.value);
 
