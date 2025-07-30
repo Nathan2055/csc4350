@@ -69,6 +69,15 @@ h1 {
     font-size: 2rem;
     font-weight: bold;
     color: #6857b7;
+    margin-top: 5px;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+#custom-timer-input {
+    margin-top: 10px;
+    margin-left: 10rem;
+    margin-right: 10rem;
 }
 
 .timer-controls {
