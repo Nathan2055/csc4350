@@ -16,8 +16,8 @@ app.get("/pomodoro-styles.css", (req, res) => {
 })
 
 // Serve the Tailwind script
-app.get("/tailwindcss-3.4.14.js", (req, res) => {
-    res.sendFile(__dirname + "/public/tailwindcss-3.4.14.js");
+app.get("/tailwindcss-3.4.17.js", (req, res) => {
+    res.sendFile(__dirname + "/public/tailwindcss-3.4.17.js");
 })
 
 // Serve the background image
