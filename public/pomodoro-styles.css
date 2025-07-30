@@ -5,12 +5,7 @@
 }
 
 body {
-    /*
-    font-family: sans-serif;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-family: 'Segoe UI', sans-serif;
-    */
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, 'Segoe UI', sans-serif;
     text-align: center;
     background-image: url('background.png');
     background-size: contain;
@@ -76,9 +71,6 @@ h1 {
     font-size: 2rem;
     font-weight: bold;
     color: #6857b7;
-    /*
-    margin-left: 5px;
-    */
 }
 
 .timer-controls {
@@ -89,6 +81,7 @@ h1 {
 
 #add-task-button {
     margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 button {
@@ -102,7 +95,7 @@ button {
     border-radius: 0.500rem;
     cursor: pointer;
     transition: background-color 0.1s;
-    box-shadow: 0 10px 10px rgba(1, 0, 0, 0.297);
+    box-shadow: 0 10px 10px rgba(1, 0, 0, 0.3);
 }
 
 button:hover {
@@ -110,14 +103,13 @@ button:hover {
 }
 
 .custom-border {
-  border: 3px solid #66629d; 
-  border-radius: 0.5rem;     
-  color: rgb(132, 103, 103);
-  box-shadow: 0 4px 6px rgba(1, 0, 0, 0.2);
-  padding: 0.25rem 0.5rem;
-  outline: none;
+    border: 3px solid #66629d;
+    border-radius: 0.5rem;
+    color: #846767;
+    box-shadow: 0 10px 10px rgba(1, 0, 0, 0.3);
+    padding: 0.25rem 0.5rem;
+    outline: none;
 }
-
 
 ul {
     text-decoration: none;
