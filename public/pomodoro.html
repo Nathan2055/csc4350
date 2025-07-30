@@ -50,12 +50,11 @@
         <div class="todo-list">
           <ul id="task-list">
             <li>Task 1 | EST Time | Est Pomodoro</li>
-            <li>Task 2 | EST Time | Est Pomodoro</li>
           </ul>
           <div id="task-addition">
             <input id="task-name" type="text" name="task-name" placeholder="Task name"
               class="w-full md:w-1/2 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
-            <input id="task-time" type="text" name="task-est-time" placeholder="Est. Time"
+            <input id="task-time" type="text" name="task-time" placeholder="Est. Time"
               class="w-full md:w-1/4 text-[2.5vw] md:text-base p-2 border border-gray-300 rounded" />
             <button id="add-task-button">Add</button>
           </div>
@@ -289,7 +288,7 @@
         const taskNameInput = document.getElementById("task-name");
         const taskEstTimeInput = document.getElementById("task-time");
 
-        if (!taskName || !taskTime) return;
+        if (!taskNameInput || !taskEstTimeInput) return;
 
         const taskName = taskNameInput.value.trim();
         const taskTime = parseInt(taskEstTimeInput.value);
